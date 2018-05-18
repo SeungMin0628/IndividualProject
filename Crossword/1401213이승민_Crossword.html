@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>1401213이승민_Crossword</title>
+        <!-- CSS 스타일 시트 -->
+        <style>
+            #headline {
+                display:            table;
+                border:             none;
+                width:              904px;
+                height:             124px;
+                margin-left:        auto;
+                margin-right:       auto;
+            }
+
+            #title {
+                display:            table-cell;
+                border:             1px solid darkblue;
+                background:         deepskyblue;
+                width:              902px;
+                height:             60px;
+                float:              left;
+                text-align:         center;
+                line-height:        60px;
+                font-size:          x-large;
+                user-select:        none;
+            }
+
+            .divButton {
+                display:            inline-block;
+                margin-top:         5px;
+                margin-left:        10px;
+                margin-right:       10px;
+                border:             6px double mediumblue;
+                border-radius:      15px;
+                width:              180px;
+                height:             40px;
+                line-height:        40px;
+                font-size:          x-large;
+                text-align:         center;
+                user-select:        none;
+            }
+
+            #gameStart {
+                display:            table-cell;
+                border:             none;
+                margin-top:         10px;
+                margin-bottom:      10px;
+                margin-left:        5px;
+                margin-right:       5px;
+                width:              190px;
+                height:             40px;
+                float:              left;
+                text-align:         center;
+                line-height:        40px;
+                user-select:        none;
+                font-size:          x-large;
+                color:              white;
+                background-color:   darkblue;
+                box-shadow:         0px 0px 0.5em black;
+            }
+
+            #subMenu {
+                display:            table-cell;
+                border:             none;
+                width:              700px;
+                height:             60px;
+                float:              right;
+                text-align:         center;
+                line-height:        60px;
+            }
+
+            #bodyLine {
+                display:            table;
+                border:             1px solid black;
+                width:              904px;
+                height:             602px;
+                margin-left:        auto;
+                margin-right:       auto;
+            }
+
+            #stage {
+                display:            table-cell;
+                border:             1px solid black;
+                width:              600px;
+                height:             600px;
+                text-align:         center;
+                vertical-align:     middle;
+            }
+
+            #stageTable {
+                display:            inline;
+                border-spacing:     4px 3px;
+            }
+
+            #stageTBody {
+                position:           relative;
+                left:               auto;
+                right:              auto;
+                top:                25%;
+            }
+
+            .cell {
+                width:              50px;
+                height:             50px;
+                border-radius:      10px;
+                text-align:         center;
+                font-size:          large;
+                user-select:        none;
+            }
+
+            .closedCell {
+                border:             2px solid #333333;
+                background-color:   gray;
+            }
+
+            .openedCell {
+                border:             2px solid royalblue;
+                background:         radial-gradient(circle, lightskyblue, white);
+                user-select:        none;
+            }
+
+            .questionCell {
+                border:                     2px solid royalblue;
+                animation:                  1s questionCellBackground;
+                animation-iteration-count:  infinite;
+            }
+
+            @keyframes questionCellBackground {
+                to, end {
+                    background:         white;
+                }
+
+                25% {
+                    background:         linear-gradient(315deg, lightskyblue, white);
+                }
+
+                50% {
+                    background:         linear-gradient(315deg, white, lightskyblue, white);
+                }
+
+                75% {
+                    background:         linear-gradient(315deg, white, lightskyblue);
+                }
+            }
+
+            .openCellAnimation {
+                animation:              1s openCell;
+                animation-fill-mode:    both;
+            }
+
+            @keyframes openCell {
+                0%      {
+                    color:          transparent;
+                    transform:      perspective(500px) rotateY(180deg);}
+                100%    {
+                    color:          black;
+                    transform:      perspective(500px) rotateY(0deg);
+                }
+            }
+
+            #timer {
+                display:            table-cell;
+                border:             1px solid black;
+                width:              300px;
+                height:             100px;
+                float:              right;
+                text-align:         center;
+                line-height:        100px;
+                font-size:          xx-large;
+                user-select:        none;
+            }
+
+            .fontTodarkblue {
+                color:              darkblue;
+            }
+
+            .fontToRed {
+                color:              red;
+            }
+
+            .fontToBlue {
+                color:              blue;
+            }
+
+            .clickable {
+                cursor:             pointer;
+            }
+
+            .cursorToDefault {
+                cursor:             default;
+            }
+
+            #status {
+                display:            table-cell;
+                border:             1px solid black;
+                width:              300px;
+                height:             100px;
+                float:              right;
+                text-align:         center;
+                line-height:        100px;
+                font-size:          xx-large;
+                user-select:        none;
+            }
+
+            #area {
+                display:            table-cell;
+                border:             1px solid black;
+                width:              300px;
+                height:             296px;
+                float:              right;
+                text-align:         center;
+            }
+
+            #messageArea {
+                margin-top:         5px;
+                border:             none;
+                width:              290px;
+                height:             280px;
+                resize:             none;
+                font-size:          large;
+                font-family:        '맑은 고딕';
+                user-select:        none;
+            }
+
+            #input {
+                display:            table-cell;
+                border:             1px solid black;
+                width:              300px;
+                height:             100px;
+                float:              right;
+                text-align:         center;
+            }
+
+            #answer {
+                margin-top:         10px;
+                margin-bottom:      5px;
+                padding:            5px;
+                border:             1px solid darkgray;
+                border-radius:      5px;
+                width:              250px;
+                font-size:          x-large;
+            }
+
+            #submit {
+                border-radius:      15px;
+                width:              260px;
+                font-size:          x-large;
+            }
+
+            .select_table {
+                border:             1px solid black;
+                width:              500px;
+                height:             97px;
+                margin:             15px;
+                border-collapse:    collapse;
+                user-select:        none;
+            }
+
+            .select_title_td {
+                border:             1px solid black;
+                padding:            3px;
+                width:              350px;
+                height:             62px;
+                font-size:          x-large;
+                text-align:         center;
+            }
+
+            .select_content_td {
+                border:             1px solid black;
+                height:             20px;
+                padding:            3px;
+                font-size:          small;
+                text-align:         center;
+            }
+
+            .select_other_td {
+                border:             1px solid black;
+                padding-left:       10px;
+                width:              150px;
+                height:             20px;
+                font-size:          small;
+                text-align:         left;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="headline">
+            <div id="title" class="cursorToDefault">2-WDJ 1401213 이승민 JavaScript Term Project - Crossword Puzzle</div>
+            <div id="gameStart" class="clickable" onclick="showMenu()">게임 시작</div>
+            <div id="subMenu">
+                <div id="hint" class="divButton cursorToDefault">힌트 × 0</div>
+                <div id="cancel" class="divButton cursorToDefault">취소</div>
+                <div id="exit" class="divButton cursorToDefault">종료</div>
+            </div>
+        </div>
+        <div id="bodyLine">
+            <div id="stage">
+                <table id="stageTable">
+                    <tbody id="stageTbody">
+                    </tbody>
+                </table>
+            </div>
+            <div id="timer" class="cursorToDefault"></div>
+            <div id="status" class="cursorToDefault"></div>
+            <div id="area">
+                <textarea id="messageArea" readonly></textarea>
+            </div>
+            <div id="input">
+                <input id="answer" type="text" disabled><br>
+                <input id="submit" type="button" value="확인" disabled>
+            </div>
+        </div>
+
+        <!-- 스크립트 -->
+        <script language="JavaScript">
+            /*
+             ## Crossword Puzzle Game ##
+             만든이 : 2-WDJ 이승민 (1401213)
+             만든날 : 2017.06.08  ~  2017.07.04
+             */
+
+            /*
+                고칠 목록
+                Timer.update - 시간이 0일 때
+                CWMain.prototype.showMenu - 게임이 진행중일 때
+            */
+
+            /* 변수 & 클래스 목록 */
+            /*
+                boolean onGame                          : 현재 게임중이면 true, 아니면 false
+                Array   puzzleAry                       : 퍼즐 객체를 담는 배열.
+                Timer   timer                           : Timer 객체를 담는 변수
+                Object  Cell(argWord, argPosition)      : 퍼즐 테이블의 칸 하나에 해당하는 객체. 해당 칸에 담긴 글자와 해당 칸의 위치 정보, 공개 여부를 담고 잇다.
+                Object  Word(argIndex, argLocation, argSize, argExplain, argAnswer)
+                                                        : 퍼즐 테이블의 단어 열(또는 행)에 해당하는 객체. 해당 단어에 대한 정보, 칸 배열 등을 담고 있다.
+                Object  Puzzle()                        : 퍼즐 테이블에 해당하는 객체. 퍼즐에 대한 다양한 정보와 단어 배열 등을 담고 있다.
+                Object  Timer(argTime)                  : 경기 시간을 측정하는 시계 객체.
+            */
+            var onGame      = false;            // 현재 게임 실행 여부를 표시하는 변수
+            var puzzleAry   = Array();          // 퍼즐 배열에 추가할 문제를 담을 배열
+            var timer       = null;             // 시계 객체를 담는 변수
+
+            /* 하나의 글자가 들어가는 칸 객체 (각 Div를 관리하는 객체) */
+            function Cell(argWord, argPosition) {
+                this.wordValue      = argWord;          // 해당 칸이 담고 있는 글자
+                this.position       = argPosition;      // 해당 칸의 위치
+                this.isThisOpen     = false;            // 해당 칸이 공개되었습니까?
+            }
+
+            /* 단어 객체 */
+            function Word(argIndex, argLocation, argSize, argExplain, argAnswer) {
+                this.index      = argIndex;                                     // 해당 단어의 문제번호. (홀수 : 가로, 짝수 : 세로)
+                this.location   = argLocation;                                  // 해당 문제의 위치
+                this.explain    = argExplain;                                   // 해당 문제에 대한 설명.
+                this.answer     = argAnswer;                                    // 해당 문제의 정답
+                this.correct    = false;                                        // 해당 단어를 맞췄습니까?
+                this.cellAry    = Array();                                      // Word 객체를 담는 배열
+
+                // answer를 쪼개서 cell 객체로 만든 다음 cellAry에 추가
+                var isThisHorizontal    = (this.index % 2 != 0 ? true : false);     // 해당 단어가 가로문제인지 판단
+                var charAry             = Array.from(this.answer);                  // 정답을 각 글자로 쪼개서 배열화
+                // 단어 객체의 칸 배열을 도는 반복문
+                for(let i in charAry) {
+                    let tempPosition = -1;      // 글자 위치 임시 저장용 변수
+
+                    // 가로문제일 시
+                    if(isThisHorizontal) {
+                        tempPosition = this.location + parseInt(i);
+
+                        // 세로문제일 시
+                    } else {
+                        tempPosition = this.location + (parseInt(i) * argSize);
+                    }
+
+                    this.cellAry.push(new Cell(charAry[i], tempPosition));
+                }
+            }
+
+            /* 퍼즐 객체 */
+            function Puzzle() {
+                this.title = "";            // 해당 문제의 제목
+                this.difficulty = -1;       // 해당 문제의 난이도
+                this.content = "";          // 해당 문제의 설명
+                this.size = -1;             // 해당 문제의 길이
+                this.primalTime = -1;       // 해당 문제를 풀 때 주는 시간
+                this.hint = 3;              // 사용할 수 있는 힌트 개수
+                this.wordAry = Array();     // 단어를 담을 배열
+            }
+
+            /* 타이머 객체 */
+            function Timer(argTime) {
+                this.timerDiv   = document.getElementById('timer');     // 시간을 출력할 div 요소 가져오기
+                this.count      = argTime;                              // 초기 설정 시간
+                this.playTimer  = null;                                 // timer interval 저장용 변수
+            }
+
+            /* 타이머 시작 */
+            Timer.prototype.startTimer = function() {
+                this.timerDiv.innerText = padToZeros(Math.floor(this.count / 60), 2) + ":" + padToZeros((this.count % 60), 2);
+                this.timerDiv.classList.add('fontTodarkblue');
+                this.update();
+            };
+
+            /* 타이머 종료 */
+            Timer.prototype.stopTimer = function() {
+                clearInterval(this.playTimer);
+                this.timerDiv.innerHTML = "";
+            };
+
+            /* 타이머 갱신 */
+            Timer.prototype.update = function() {
+                var count = this.count;
+                var timerDiv = this.timerDiv;
+                var minute = 0;
+                var second = 0;
+                this.playTimer = setInterval(function() {
+                    count--;
+                    minute = Math.floor(count / 60);
+                    second = count % 60;
+
+                    // 남은 시간이 0일 때 ( 고칠 것 )
+                    if (count == 0) {
+                        timerDiv.innerHTML = "";
+                        endGame(false);         // 패배!
+                    // 남은 시간이 있을 때
+                    } else {
+                        // 남은 시간이 1분일 때
+                        if (count == 60) {
+                            timerDiv.classList.remove('fontTodarkblue');
+                            timerDiv.classList.add('fontToRed');
+                            document.getElementById('status').classList.add('fontToRed');
+                            document.getElementById('status').innerHTML = '1분 남았습니다!';
+                        }
+                        timerDiv.innerText = padToZeros(minute, 2) + ":" + padToZeros(second, 2);
+                    }
+                }, 1000);
+            };
+
+            /* 주요 함수 목록 */
+            /*
+            Element makeSelect(argPuzzle, argIndex)     : 문제 객체의 정보를 전달받아 선택지 버튼을 만들어 반환한다.
+            void startGame(argPuzzle)                   : 사용자가 선택지 버튼을 클릭했을 때 게임을 실행할 수 있도록 준비하는 함수
+            void showExplain(event)                     : 이벤트리스너 추가에 사용하는 함수. 문제 번호가 등록된 칸을 클릭할 시 해당 문제의 설명을 출력
+            void checkAnswer()                          : 이벤트리스너 추가에 사용하는 함수. 사용자가 입력한 답안이 맞는 건지 체크해서 정오답 여부를 알려준다. & 전부 정답일 경우 승리 판정
+            void showHint()                             : 이벤트리스너 추가에 사용하는 함수. 힌트를 하나 사용하여 글자 하나를 공개한다.
+            void endGame(argWin)                        : 게임을 종료하는 함수.
+            void stopGame(argPuzzle)                    : 게임을 끝내고 나서 매개인자로 전달받은 퍼즐 객체의 정보를 원래 상태로 초기화하는 함수.
+            void showMenu()                             : 게임 시작 버튼을 누를 시 각 게임에 관한 정보를 출력
+            */
+
+            /* 퍼즐 객체를 전달받아 선택지를 만듬 ( 2번째 매개인자 : 문제의 번호) */
+           function makeSelect(argPuzzle, argIndex) {
+                // argPuzzle이 Puzzle 객체가 아닐 시 메서드 종료
+                if (!(argPuzzle instanceof Puzzle)) {
+                    return;
+                }
+
+                // selectDiv 안에 갖다붙일, 문제에 대한 정보를 알리는 테이블
+                var tableObj = document.createElement("table");
+                tableObj.setAttribute("onclick", "startGame(puzzleAry[" + argIndex + "])");
+                tableObj.classList.add('clickable');
+                tableObj.classList.add("select_table");
+
+                var createTR = document.createElement("tr"); // 줄
+                var createTD = document.createElement("td"); // 칸
+
+                // 타이틀 붙이기
+                createTD.innerText = argPuzzle.title;
+                createTD.setAttribute("rowspan", "3");
+                createTD.setAttribute("class", "select_title_td");
+                createTR.appendChild(createTD);
+
+                // 난이도 붙이기
+                createTD = document.createElement("td");
+                createTD.innerText = "난이도 : ";
+                for (let i = 0; i < 5; i++) {
+                    if (i < argPuzzle.difficulty) {
+                        createTD.innerText += '★';
+                    } else {
+                        createTD.innerText += '☆';
+                    }
+                }
+                createTD.setAttribute("class", "select_other_td");
+                createTR.appendChild(createTD);
+                tableObj.appendChild(createTR);
+
+                // 길이 붙이기
+                createTR = document.createElement("tr");
+                createTD = document.createElement("td");
+                createTD.innerText = "크기 : " + argPuzzle.size + " * " + argPuzzle.size;
+                createTD.setAttribute("class", "select_other_td");
+                createTR.appendChild(createTD);
+                tableObj.appendChild(createTR);
+
+                // 시간 붙이기
+                createTR = document.createElement("tr");
+                createTD = document.createElement("td");
+                createTD.innerText = "시간 : " + (argPuzzle.primalTime / 60) + "분";
+                createTD.setAttribute("class", "select_other_td");
+                createTR.appendChild(createTD);
+                tableObj.appendChild(createTR);
+
+                // 설명 붙이기
+                createTR = document.createElement("tr");
+                createTD = document.createElement("td");
+                createTD.innerText = argPuzzle.content;
+                createTD.setAttribute('colspan', '2');
+                createTD.setAttribute("class", "select_content_td");
+                createTR.appendChild(createTD);
+                tableObj.appendChild(createTR);
+
+                return tableObj;
+            };
+
+            /* 퍼즐 객체를 전달받아 게임을 시작할 것 */
+            function startGame(argPuzzle) {
+
+                // 전달받은 객체가 Puzzle 객체가 아닐 경우 종료
+                if ((argPuzzle instanceof Puzzle) == false) {
+                    return;
+                }
+
+                var submitButton = document.getElementById('submit');       // 전송용 버튼
+                var stageTbody = document.getElementById('stageTbody');     // 게임판 tbody
+
+                stageTbody.dataset.puzzleName = argPuzzle.title;            // 퍼즐 이름 명시
+
+                // 1. 현재 tBody에 있는 하위 요소들 제거
+                clearStage();
+
+                // 2. 타이머 객체 생성 후 작동 개시
+                timer = new Timer(argPuzzle.primalTime);
+                timer.startTimer();
+
+                // 3. 퍼즐 객체에 지정된 사이즈 만큼의 테이블을 만들고, 필요한 칸을 설정하기
+                var createTr = null;        // 행 추가용 변수
+                var createTd = null;        // 칸 추가용 변수
+
+                for(let i = 0; i < argPuzzle.size; i++) {
+                    // 3-1. 행 추가
+                    createTr = document.createElement('tr');
+                    for(let j = 0; j < argPuzzle.size; j++) {
+                        // 3-2. 칸 추가
+                        let cellIndex = (i * argPuzzle.size) + j;               // 현재 번호
+                        createTd = document.createElement('td');                // 칸
+                        createTd.setAttribute('id', 'cell' + cellIndex);        // 칸의 고유 번호 부여
+                        createTd.classList.add('cell');                         // 칸 공통 스타일 부여
+
+                        // 해당 문제의 시작점일 경우
+                        if(argPuzzle.wordAry.some(function(element) {
+                                return element.location == cellIndex;
+                            })) {
+                            // 단어 객체를 전달하기 위한 임시 저장용 변수
+                            let tempWord = argPuzzle.wordAry.find(function(wordValue) {
+                                return wordValue.location == cellIndex;
+                            });
+
+                            // CSS 스타일 지정
+                            createTd.classList.add('questionCell');
+                            createTd.classList.add('clickable');
+
+                            // 문제 번호 매기기
+                            createTd.innerHTML = tempWord.index;
+
+                            // 해당 문제의 위치 데이터 삽입
+                            createTd.dataset.wordIndex = tempWord.index;
+
+                            // 이벤트 추가
+                            createTd.addEventListener('click', showExplain);
+
+                        // 해당 문제의 시작점은 아니지만 글자가 들어가 있을 경우
+                        } else if(argPuzzle.wordAry.some(function(wordValue) {
+                                return wordValue.cellAry.some(function(cellValue) {
+                                    return cellValue.position == cellIndex;
+                                })
+                            })) {
+
+                            // CSS 스타일 지정
+                            createTd.classList.add('openedCell');
+                            createTd.classList.add('cursorToDefault');
+
+                        // 글자가 없을 경우
+                        } else {
+                            createTd.classList.add('closedCell');
+                        }
+                        createTr.appendChild(createTd);
+                    }
+                    stageTbody.appendChild(createTr);
+                }
+
+                // 4. 답안 제출 버튼에 이벤트 설정
+                submitButton.addEventListener('click', checkAnswer);
+
+                // 5. 보조메뉴 설정
+                var hintDiv = document.getElementById('hint');      // 힌트 정보를 나타내는 div 가져오기
+                var cancelDiv = document.getElementById('cancel');  // 취소 버튼 div 가져오기
+                var exitDiv = document.getElementById('exit');       // 종료 버튼 div 가져오기
+
+
+                // cancelDiv 스타일 & 이벤트 설정
+                hintDiv.innerHTML = '힌트 × ' + argPuzzle.hint;
+                hintDiv.classList.remove('cursorToDefault');
+                hintDiv.classList.add('clickable');
+                hintDiv.addEventListener('click', showHint);
+
+                cancelDiv.classList.remove('cursorToDefault');
+                cancelDiv.classList.add('clickable');
+                cancelDiv.addEventListener('click', disableInput);
+
+                // exitDiv 스타일 & 이벤트 설정
+                exitDiv.classList.remove('cursorToDefault');
+                exitDiv.classList.add('clickable');
+                exitDiv.addEventListener('click', endGame);
+
+                // 6. 현재 게임 실행 중임을 알림
+                onGame = true;
+            };
+
+            /* 문제 정보가 저장된 칸을 누를 시 설명 출력 */
+            function showExplain(event) {
+                var puzzleObj = puzzleAry.find(function(value) {
+                    return value.title == document.getElementById('stageTbody').dataset.puzzleName;
+                });     // 현재 풀고 있는 퍼즐 데이터 찾기
+
+                var wordValue = puzzleObj.wordAry.find(function(value) {
+                    return value.index == event.target.dataset.wordIndex;
+                });     // 사용자가 클릭한 칸이 찾아야 하는 단어 데이터
+
+                var messageArea = document.getElementById('messageArea');   // 메시지 출력을 위한 textarea 요소
+
+                // 문제 설명 출력
+                messageArea.value = wordValue.index + "번 문제 (" +
+                    (wordValue.index % 2 == 1 ? '가로 문제' : '세로 문제') + ")\n" +
+                    "================\n" + wordValue.explain;
+
+                // 답안 입력칸, 버튼 활성화
+                document.getElementById('answer').removeAttribute('disabled');
+                document.getElementById('submit').removeAttribute('disabled');
+                document.getElementById('answer').value = "";
+
+                // submit 버튼에 현재 풀고 있는 문제의 순서 번호 등록
+                document.getElementById('submit').dataset.wordIndex = wordValue.index;
+            }
+
+            /* submit 버튼을 눌러 답안을 체크 */
+            function checkAnswer() {
+                var puzzleObj = puzzleAry.find(function(value) {
+                    return value.title == document.getElementById('stageTbody').dataset.puzzleName;
+                });     // 현재 풀고 있는 퍼즐 데이터 찾기
+                var wordValue = puzzleObj.wordAry.find(function(value) {
+                    return value.index == event.target.dataset.wordIndex;
+                });     // 사용자가 클릭한 칸이 찾아야 하는 단어 데이터
+
+                var messageArea = document.getElementById('messageArea');       // 메시지 출력을 위한 textarea 요소
+                var answerInput = document.getElementById('answer');            // 사용자 입력용 input
+                var statusDiv   = document.getElementById('status');            // 상황 표시용 div
+
+                // 사용자가 입력한 답이 정답일 때
+                if (wordValue.answer == answerInput.value) {
+                    wordValue.correct = true;
+                    statusDiv.classList.remove('fontToRed');
+                    statusDiv.classList.add('fontToBlue');
+                    statusDiv.innerHTML = '정답';
+
+                    // 정답 공개 애니메이션
+                    for(let i = 0; i < wordValue.cellAry.length; i++) {
+
+                        // 해당 칸이 공개되지 않은 경우 애니메이션 실행
+                        if(wordValue.cellAry[i].isThisOpen == false) {
+                            var tdObj = document.getElementById('cell' + (wordValue.cellAry[i].position));    // 애니메이션을 재생할 칸 불러오기
+                            tdObj.innerHTML = wordValue.cellAry[i].wordValue;
+                            tdObj.classList.add('openCellAnimation');
+
+                            wordValue.isThisOpen = true;
+
+                            // 공개하는 칸이 문제를 표시하는 칸일 시
+                            if (wordValue.cellAry[i].position == wordValue.location) {
+                                tdObj.classList.remove('questionCell');
+                                tdObj.classList.remove('clickable');
+                                tdObj.classList.add('openedCell');
+                                tdObj.classList.add('cursorToDefault');
+
+                                // 이벤트 리스너 제거
+                                tdObj.removeEventListener('click', showExplain);
+                            }
+                        }
+                    }
+
+                    for(let i = 0; i < puzzleObj.wordAry.length; i++) {
+                        if(puzzleObj.wordAry[i].correct == false) {
+                            break;
+                        } else if (i == puzzleObj.wordAry.length - 1) {
+                            endGame(true);
+                        }
+                    }
+
+                    // 사용자가 입력한 답이 오답일 때
+                } else {
+                    statusDiv.classList.remove('fontToBlue');
+                    statusDiv.classList.add('fontToRed');
+                    statusDiv.innerHTML = '오답';
+                }
+
+                disableInput();
+            }
+
+            /* 힌트 버튼을 클릭할 시 무작위로 한 칸을 공개하여 보여준다. */
+            function showHint() {
+                var puzzleObj = puzzleAry.find(function(value) {
+                    return value.title == document.getElementById('stageTbody').dataset.puzzleName;
+                }); // 현재 푸는 중인 퍼즐 문제 가져오기
+
+                // 남은 힌트가 없다면 ==> 경고창 띄우고 함수 종료
+                if (puzzleObj.hint <= 0) {
+                    alert('남은 힌트가 없습니다!')
+                    return;
+                }
+
+                var cellObj = null;             // 공개할 칸 객체
+                var tdObj = null;               // 해당 칸 객체에 해당하는 테이블의 셀
+
+                do {
+                    // 무작위로 가져올 단어 객체 지정
+                    var randomWord = Math.floor(Math.random() * puzzleObj.wordAry.length);
+                    var wordObj = puzzleObj.wordAry[randomWord];
+
+                    // 무작위로 가져올 칸 객체 지정
+                    var randomCell = Math.floor(Math.random() * wordObj.cellAry.length);
+                    cellObj = wordObj.cellAry[randomCell];
+                    tdObj = document.getElementById('cell' + cellObj.position);
+                } while(tdObj.innerText == cellObj.wordValue);
+
+                // 해당 칸 객체에 해당하는 테이블의 칸 가져오기.
+                tdObj.innerText = cellObj.wordValue;
+
+                puzzleObj.hint--;
+                document.getElementById('hint').innerHTML = '힌트 × ' + puzzleObj.hint;
+            }
+
+            /* 승패가 결정날 경우 게임을 끝내는 함수 (매개인자의 자료형이 boolean인 경우 : 승패가 결정난 경우, 매개인자의 자료형이 event인 경우 : 사용자 임의 종료) */
+            function endGame(argWin) {
+                var puzzleObj = puzzleAry.find(function (value) {
+                    return value.title == document.getElementById('stageTbody').dataset.puzzleName;
+                });     // 현재 풀고 있는 퍼즐 데이터 찾기
+                var statusDiv = document.getElementById('status');      // 상태 표시용 div
+
+                // 매개인자가 있을 때 => 승패 결정
+                if (typeof arguments[0] == 'boolean') {
+                    // 이겼을 때
+                    if (argWin) {
+                        statusDiv.classList.add('fontToBlue');
+                        statusDiv.innerHTML = '승리!';
+                        // 졌을 때
+                    } else {
+                        // 테이블 각 칸의 스타일 변경 & 이벤트 제거
+                        var stageTbody = document.getElementById('stageTbody');     // tbody 요소 가져오기
+
+                        for (tempWord of stageTbody.children) {
+                            for (tempCell of tempWord.children) {
+                                // 스타일 변경
+                                tempCell.classList.remove('questionCell');
+                                tempCell.classList.remove('openedCell');
+                                tempCell.classList.remove('clickable');
+                                tempCell.classList.add('closedCell');
+                                tempCell.classList.add('cursorToDefault');
+
+                                // 내용 제거
+                                tempCell.innerHTML = "";
+
+                                // 이벤트 제거
+                                tempCell.removeEventListener('click', showExplain);
+                            }
+                        }
+
+                        // 패배 알림
+                        statusDiv.classList.add('fontToRed');
+                        statusDiv.innerHTML = '패배!';
+                    }
+                // 매개인자가 없을 시 : 사용자 임의 종료
+                } else {
+                    statusDiv.innerHTML = "";
+                    clearStage();
+                }
+
+                // 1. 인터페이스 관련 설정 초기화 : 퍼즐 객체 초기화, 타이머 중지, 입력창 비활성화
+                stopGame(puzzleObj);
+                disableInput();
+
+                // 2. 보조메뉴 초기화
+                var subMenuDiv = document.getElementById('subMenu');
+
+                // subMenuDiv의 하위 요소 (hint, cancel, exit)를 돌며 CSS class를 변경하고 이벤트를 제거
+                for(let tempElement of subMenuDiv.children) {
+                    tempElement.classList.remove('clickable');
+                    tempElement.classList.add('cursorToDefault');
+
+                    switch(tempElement.id) {
+                        case 'hint':
+                            tempElement.removeEventListener('click', showHint);
+                            tempElement.innerHTML = '힌트 × 0';
+                            break;
+                        case 'cancel':
+                            tempElement.removeEventListener('click', disableInput);
+                            break;
+                        case 'exit':
+                            tempElement.removeEventListener('click', endGame);
+                            break;
+                    }
+                }
+            }
+
+            /* 퍼즐 객체를 전달받아 게임 이전의 상태로 복원하고, 게임을 종료한다 */
+            function stopGame(argPuzzle) {
+                if(argPuzzle instanceof Puzzle == false) {
+                    // 매개인자가 퍼즐 객체가 아닐 경우 함수 종료
+                    return;
+                }
+
+                // 1. 해당 퍼즐 객체의 단어 배열을 순회하며 초기화 작업 진행
+                for(let tempWord of argPuzzle.wordAry) {
+                    // 해당 단어 객체의 글자 배열을 순회하며 초기화 작업 진행
+                    for(let tempCell of tempWord.cellAry) {
+                        tempCell.isThisOpen = false;
+                    }
+                    tempWord.correct = false;
+                }
+                argPuzzle.hint = 3;
+
+                // 타이머가 있으면 : 제거
+                if(timer != null) {
+                    timer.stopTimer();
+                    timer = null;
+                }
+
+                // 게임 종료 표시
+                this.onGame = false;
+            }
+
+            /* 게임 시작 버튼을 누르면 작동하는 함수 */
+            function showMenu() {
+                // 현재 게임중일 경우 경고창 띄우고 함수 종료
+                if (onGame) {
+                    alert('현재 게임중이므로 종료할 수 없습니다!');
+                    return;
+                }
+
+                var stageTbody      = document.getElementById('stageTbody');    // stage tbody 불러오기
+                var statusDiv       = document.getElementById('status');        // status div 불러오기
+
+                statusDiv.innerHTML = "";
+                clearStage();
+                disableInput();
+
+                // 2. 게임판에 선택지 추가하기
+                for(let i in puzzleAry) {
+                    stageTbody.appendChild(makeSelect(puzzleAry[i], i));
+                }
+            };
+
+
+
+            /* 기타 함수 목록 */
+            /*
+            void disableInput()                 : 사용자가 답안을 입력하는 입력창과 버튼을 비활성화
+            void padToZeros(argNum, argSize)    : 숫자와 자리수를 전달받아, 자릿수보다 부족한 크기만큼 왼쪽을 0으로 채우는 함수
+            void clearStage()                   : 십자말풀이 퍼즐을 푸는 공간을 비우는 함수
+            */
+
+            /* 입력창 비활성화*/
+            function disableInput() {
+                var messageArea = document.getElementById('messageArea');
+                var inputText = document.getElementById('answer');
+                var submitButton = document.getElementById('submit');
+
+                inputText.value = "";
+                messageArea.value = "";
+
+                inputText.setAttribute('disabled', 'disabled');
+                submitButton.setAttribute('disabled', 'disabled');
+            }
+
+            /* 숫자와 크기를 전달받아, 그 크기만큼 숫자의 앞 자리를 0으로 채워주는 함수 */
+            function padToZeros(argNum, argSize) {
+                var num = argNum;
+
+                for(let i = 0; i < argSize - argNum.toString().length; i++) {
+                    num = '0' + argNum;
+                }
+
+                return num;
+            }
+
+            /* stage가 담고 있는 모든 요소를 제거 */
+            function clearStage() {
+                var stageTbody = document.getElementById('stageTbody');
+
+                while(stageTbody.children.length > 0) {
+                    stageTbody.removeChild(stageTbody.firstChild);
+                }
+            }
+
+
+
+            // 문제1. 몸풀기 문제
+            puzzleAry[0] = new Puzzle();
+            puzzleAry[0].title = "몸풀기 문제";
+            puzzleAry[0].difficulty = 1;
+            puzzleAry[0].content = "크기도 작고 문제 수도 적습니다. 잠자는 뇌세포를 깨워봐요!";
+            puzzleAry[0].size = 5;
+            puzzleAry[0].primalTime = 300;
+            puzzleAry[0].wordAry.push(new Word(1, 1, 5, "학교에서 교과 과정에 따라 주된 교재로 사용하기 위하여 편찬한 책.", "교과서"));
+            puzzleAry[0].wordAry.push(new Word(2, 2, 5, "과실나무를 심은 밭.", "과수원"));
+            puzzleAry[0].wordAry.push(new Word(3, 11, 5, "어떤 일을 대가 없이 자발적으로 참여하여 도움. 또는 그런 활동.", "자원봉사"));
+            puzzleAry[0].wordAry.push(new Word(4, 14, 5, "빨간 과일의 대명사. 이걸 많이 먹으면 의사를 멀리 한다는 속담이 있다.", "사과"));
+
+            // 문제2. 쉬운 문제
+            puzzleAry[1] = new Puzzle();
+            puzzleAry[1].title = "쉬운 문제";
+            puzzleAry[1].difficulty = 2;
+            puzzleAry[1].content = "아직도 뇌세포가 잔다고요? 그럼 이 문제는 어떤가요?";
+            puzzleAry[1].size = 6;
+            puzzleAry[1].primalTime = 420;
+            puzzleAry[1].wordAry.push(new Word(1, 2, 6, "서울 남산에 있는 탑. 서울의 상징.", "남산타워"));
+            puzzleAry[1].wordAry.push(new Word(2, 3, 6, "18세기 중엽 영국에서 시작된 기술 혁신과 이와 동반한 사회경제 구조의 개혁", "산업혁명"));
+            puzzleAry[1].wordAry.push(new Word(3, 18, 6, "궁지에 몰려 살아날 길이 없게 된 막다른 처지", "절체절명"));
+            puzzleAry[1].wordAry.push(new Word(4, 5, 6, "마소의 귀에서 턱 밑으로 늘여 단 방울의 소리. 동명의 다큐멘터리 영화가 유명하다.", "워낭소리"));
+            puzzleAry[1].wordAry.push(new Word(5, 31, 6, "관광하러 다니는 사람", "관광객"));
+            puzzleAry[1].wordAry.push(new Word(6, 7, 6, "서울 중구 장충동2가에 있는 실내 종합 경기장.", "장충체육관"));
+
+            // 문제3. 본격적인 문제
+            puzzleAry[2] = new Puzzle();
+            puzzleAry[2].title = "본격적인 문제";
+            puzzleAry[2].difficulty = 3;
+            puzzleAry[2].content = "뇌세포를 깨웠으니 이제 움직여볼까요? 느긋하게 풀면 충분히 풀 수 있어요!";
+            puzzleAry[2].size = 7;
+            puzzleAry[2].primalTime = 600;
+            puzzleAry[2].wordAry.push(new Word(1, 0, 7, "책을 읽고 떠올린 감상이나 생각을 자유롭게 표현한 글.", "독서감상문"));
+            puzzleAry[2].wordAry.push(new Word(2, 1, 7, "대한민국의 수도.", "서울"));
+            puzzleAry[2].wordAry.push(new Word(3, 16, 7, "이탈리아의 마르코 폴로가 1271년부터 1295년까지 동방을 여행한 체험담을 루스티첼로가 기록한 여행기.", "동방견문록"));
+            puzzleAry[2].wordAry.push(new Word(4, 3, 7, "어떤 일이나 말을 할 때 짝을 맞추는 사람.", "상대방"));
+            puzzleAry[2].wordAry.push(new Word(5, 37, 7, "연필 안에 들어 있는, 흑연으로 이루어진 가느다란 심", "연필심"));
+            puzzleAry[2].wordAry.push(new Word(6, 13, 7, "사계절 푸른 나무.", "상록수"));
+            puzzleAry[2].wordAry.push(new Word(7, 43, 7, "시체나 유골을 불에 태워 장사지내는 것.", "화장"));
+            puzzleAry[2].wordAry.push(new Word(8, 18, 7, "물건을 보면 그것을 가지고 싶은 욕심이 생긴다는 뜻의 한자성어.", "견물생심"));
+            puzzleAry[2].wordAry.push(new Word(10, 30, 7, "공연음악·연극·무용 따위를 발표하는 무대와 관중석을 갖춘 자리.", "공연장"));
+
+            // 문제4. 난감한 문제
+            puzzleAry[3] = new Puzzle();
+            puzzleAry[3].title = "난감한 문제";
+            puzzleAry[3].difficulty = 4;
+            puzzleAry[3].content = "이제부터 조금 궁리하셔야 할걸요?";
+            puzzleAry[3].size = 8;
+            puzzleAry[3].primalTime = 900;
+            puzzleAry[3].wordAry.push(new Word(1, 9, 8, "스타크래프트에 등장하는 프로토스 마법 유닛.", "하이템플러"));
+            puzzleAry[3].wordAry.push(new Word(2, 11, 8, "영국 잉글랜드 중남부를 흐르는 강.", "템스강"));
+            puzzleAry[3].wordAry.push(new Word(3, 26, 8, "현실의 이미지나 배경에 3차원 가상 이미지를 겹쳐서 하나의 영상으로 보여주는 기술.", "증강현실"));
+            puzzleAry[3].wordAry.push(new Word(4, 29, 8, "고용보험 제도의 일환으로 실업자의 생활안정, 원활한 구직활동을 위해 일정기간 동안 지급되는 급여.", "실업급여"));
+            puzzleAry[3].wordAry.push(new Word(5, 37, 8, "자기 집 문 앞에 갖다 버린 아이를 주워 기르는 아이", "업둥이"));
+            puzzleAry[3].wordAry.push(new Word(6, 43, 8, "장마가 끝날 때나 태풍이 불 때 흔히 볼 수 있는 국지성의 호우.", "장대비"));
+            puzzleAry[3].wordAry.push(new Word(7, 51, 8, "조선시대 김정호가 만든, 한반도 전체를 상세하게 그린 지도", "대동여지도"));
+            puzzleAry[3].wordAry.push(new Word(8, 24, 8, "미분의 역과정.", "부정적분"));
+            puzzleAry[3].wordAry.push(new Word(9, 57, 8, "직각삼각형에서 변의 길이 비의 값.", "삼각비"));
+            puzzleAry[3].wordAry.push(new Word(10, 39, 8, "1990년대 중후반부터 활동을 시작한 프랑스 출신의 한국 방송인.", "이다도시"));
+            puzzleAry[3].wordAry.push(new Word(11, 40, 8, "잘못한 사람이 도리어 잘 한 사람을 나무라는 경우를 이르는 말", "적반하장"));
+            puzzleAry[3].wordAry.push(new Word(12, 5, 8, "미국의 화폐 단위.", "달러"));
+            puzzleAry[3].wordAry.push(new Word(14, 7, 8, "대한민국의 헌법을 제정하고, 이를 공포한 날", "제헌절"));
+
+            // 문제5. 무자비한 문제
+            puzzleAry[4] = new Puzzle();
+            puzzleAry[4].title = "무자비한 문제";
+            puzzleAry[4].difficulty = 5;
+            puzzleAry[4].content = "당신의 뇌세포를 총동원하십시오!";
+            puzzleAry[4].size = 10;
+            puzzleAry[4].primalTime = 720;
+            puzzleAry[4].wordAry.push(new Word(1, 50, 10, "평소에 대비가 없었다가 실패한 다음에 뒤늦게야 깨달아 대비함.", '소잃고외양간고치는격'));
+            puzzleAry[4].wordAry.push(new Word(2, 12, 10, "유망 분야의 특화된 산업수요와 연계하여 최고의 교육으로 젊은 기술명장(meister)을 양성하는 전문계 고등학교.", '마이스터고등학교'));
+            puzzleAry[4].wordAry.push(new Word(3, 20, 10, 'Dihydrogen monoxide', '산화이수소'))
+            puzzleAry[4].wordAry.push(new Word(4, 40, 10, "자본금·종업원·시설 등의 규모가 작은 기업.", '중소기업'));
+            puzzleAry[4].wordAry.push(new Word(5, 14, 10, '어떤 일을 대가 없이 자발적으로 참여하여 돕는 사람', '자원봉사자'));
+            puzzleAry[4].wordAry.push(new Word(6, 0, 10, '○○○도 식후경', '금강산'));
+            puzzleAry[4].wordAry.push(new Word(7, 34, 10, '자신에 대한 정보를 상세하게 기록하여 소개하기 위한 문서', '자소서'));
+            puzzleAry[4].wordAry.push(new Word(8, 4, 10, '고체 내 전자의 전도(傳導)를 이용한 전자 부품', '전자소자'))
+            puzzleAry[4].wordAry.push(new Word(9, 81, 10, '한국의 작가 김인숙의 단편소설', '개교기념일'));
+            puzzleAry[4].wordAry.push(new Word(10, 8, 10, '환경에 가장 잘 적응하는 생물이나 집단이 살아남는다는 의미', '적자생존'));
+            puzzleAry[4].wordAry.push(new Word(11, 77, 10, '자기 자신 또는 자기와 관련되어 있는 것에 대하여 스스로 그 가치나 능력을 믿고 당당히 여기는 마음.', '자부심'));
+            puzzleAry[4].wordAry.push(new Word(12, 36, 10, 'SKY.', '서연고'));
+            puzzleAry[4].wordAry.push(new Word(13, 28, 10, '생명을 가지고 스스로 생활 현상을 유지하여 나가는 물체.', '생물'));
+            puzzleAry[4].wordAry.push(new Word(14, 49, 10, '자신이 이룬 일의 결과에 대해 스스로 미흡하게 여기는 마음', '자격지심'));
+            puzzleAry[4].wordAry.push(new Word(16, 74, 10, '멀건 대낮에 남의 물건을 훔침, 또는 그런 짓을 하는 사람.', '백념적'));
+            puzzleAry[4].wordAry.push(new Word(18, 57, 10, '치마폭의 늘어지거나 드리워진 부분.', '치맛자락'));
+        </script>
+    </body>
+</html>
